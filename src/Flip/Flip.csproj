@@ -36,6 +36,7 @@
   <ItemGroup>
     <Compile Include="ICoalescable.cs" />
     <Compile Include="ICoalescer.cs" />
+    <Compile Include="IModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
