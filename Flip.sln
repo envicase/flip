@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flip", "src\Flip\Flip.cspro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flip.Tests", "tests\Flip.Tests\Flip.Tests.csproj", "{948CE665-FA9C-458D-BAAC-6052DD815C5F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{5B4EF548-56F5-467A-B3EF-0A0B8D1CF7F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactListWithMvvmLight", "samples\ContactListWithMvvmLight\ContactListWithMvvmLight.csproj", "{AC9114D4-6E5C-4611-9C21-F040DB6F6E82}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +27,10 @@ Global
 		{948CE665-FA9C-458D-BAAC-6052DD815C5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{948CE665-FA9C-458D-BAAC-6052DD815C5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{948CE665-FA9C-458D-BAAC-6052DD815C5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC9114D4-6E5C-4611-9C21-F040DB6F6E82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC9114D4-6E5C-4611-9C21-F040DB6F6E82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC9114D4-6E5C-4611-9C21-F040DB6F6E82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC9114D4-6E5C-4611-9C21-F040DB6F6E82}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -30,5 +38,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{45144071-5729-4A06-B361-DBF1409E45E0} = {1C9DAC5C-A4CE-4E0C-BEB2-BCB0502AEDC6}
 		{948CE665-FA9C-458D-BAAC-6052DD815C5F} = {1C9DAC5C-A4CE-4E0C-BEB2-BCB0502AEDC6}
+		{AC9114D4-6E5C-4611-9C21-F040DB6F6E82} = {5B4EF548-56F5-467A-B3EF-0A0B8D1CF7F8}
 	EndGlobalSection
 EndGlobal
