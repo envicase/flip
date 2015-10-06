@@ -103,10 +103,13 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="ClearStreamAfterTestAttribute.cs" />
     <Compile Include="CoalescerTest.cs" />
     <Compile Include="ConnectionExtensionsTest.cs" />
+    <Compile Include="IFunctor.cs" />
     <Compile Include="ModelTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StreamTest.cs" />
     <Compile Include="User.cs" />
     <Compile Include="UserCoalescable.cs" />
   </ItemGroup>
