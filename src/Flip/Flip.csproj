@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Coalescer.cs" />
+    <Compile Include="ConnectionExtensions.cs" />
     <Compile Include="ICoalescable.cs" />
     <Compile Include="ICoalescer.cs" />
     <Compile Include="IConnection.cs" />

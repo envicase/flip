@@ -104,6 +104,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="CoalescerTest.cs" />
+    <Compile Include="ConnectionExtensionsTest.cs" />
     <Compile Include="ModelTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="User.cs" />
