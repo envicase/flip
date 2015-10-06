@@ -18,7 +18,7 @@
     </Grid.ColumnDefinitions>
 
     <ScrollViewer Margin="5">
-      <ListView ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedItem}" BorderThickness="0">
+      <ListView ItemsSource="{Binding Contacts}" SelectedItem="{Binding SelectedItem}" BorderThickness="0">
         <ItemsControl.ItemTemplate>
           <DataTemplate>
             <Grid Margin="10,5">

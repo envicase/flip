@@ -7,17 +7,15 @@ namespace ContactListWithMvvmLight
 {
     public class ContactViewModel : ViewModelBase
     {
-        private readonly IConnection<Contact, int> _connection;
         private Contact _model;
 
-        public ContactViewModel(Contact user)
+        public ContactViewModel(int userId)
         {
-            _connection = Stream<Contact, int>.Connect(user.Id);
-            _connection.Subscribe(m => Model = m);
-            _model = user;
+            Connection = Stream<Contact, int>.Connect(userId);
+            Connection.Subscribe(m => Model = m);
         }
 
-        protected IConnection<Contact, int> Connection => _connection;
+        protected IConnection<Contact, int> Connection { get; }
 
         public Contact Model
         {

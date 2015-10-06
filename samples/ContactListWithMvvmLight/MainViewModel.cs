@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
+using Flip;
 using GalaSoft.MvvmLight;
 
 namespace ContactListWithMvvmLight
 {
     public class MainViewModel : ViewModelBase
     {
-        private static IEnumerable<Contact> GetSampleData() => new[]
+        private static Contact[] GetSampleData() => new[]
         {
             new Contact(1, "Tony Stark", "ironman@avengers.com"),
             new Contact(2, "Bruce Banner", "hulk@avengers.com"),
@@ -21,11 +21,17 @@ namespace ContactListWithMvvmLight
 
         public MainViewModel()
         {
-            Users = (from u in GetSampleData()
-                     select new ContactViewModel(u)).ToList();
+            var source = GetSampleData();
+            var contacts = new List<ContactViewModel>();
+            foreach (var contact in source)
+            {
+                Stream<Contact, int>.Connect(contact.Id).Emit(contact);
+                contacts.Add(new ContactViewModel(contact.Id));
+            }
+            Contacts = contacts;
         }
 
-        public IEnumerable<ContactViewModel> Users { get; }
+        public IEnumerable<ContactViewModel> Contacts { get; }
 
         public ContactEditorViewModel Editor
         {

@@ -8,15 +8,6 @@ namespace ContactListWithMvvmLight
         public Contact(int id, string name, string email)
             : base(id)
         {
-            if (name == null)
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
-            if (email == null)
-            {
-                throw new ArgumentNullException(nameof(email));
-            }
-
             Name = name;
             Email = email;
         }
