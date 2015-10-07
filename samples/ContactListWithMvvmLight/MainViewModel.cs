@@ -6,6 +6,8 @@ using GalaSoft.MvvmLight;
 
 namespace ContactListWithMvvmLight
 {
+    using static Visibility;
+
     public class MainViewModel : ViewModelBase
     {
         private static Contact[] GetSampleData() => new[]
@@ -60,9 +62,9 @@ namespace ContactListWithMvvmLight
         }
 
         public Visibility EditorVisibility =>
-            _editor == null ? Visibility.Hidden : Visibility.Visible;
+            _editor == null ? Hidden : Visible;
 
         public Visibility GuideMessageVisibility =>
-            _editor == null ? Visibility.Visible : Visibility.Hidden;
+            _editor == null ? Visible : Hidden;
     }
 }
