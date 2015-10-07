@@ -107,6 +107,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="CombineOperatorsTest.cs" />
     <Compile Include="ObservableExtensionsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReactiveCommandTest.cs" />

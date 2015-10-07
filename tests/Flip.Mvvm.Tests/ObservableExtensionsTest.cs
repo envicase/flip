@@ -25,6 +25,28 @@ namespace Flip.Tests
         public void ObserveReturnsObservableForSpecifiedProperty(
             string first, string second)
         {
+            // TODO: 간헐저으로 다음과 같은 메시지와 함께 테스트가 실패합니다.
+            //
+            // Test Name:	ObserveReturnsObservableForSpecifiedProperty
+            // Test FullName:	Flip.Tests.ObservableExtensionsTest.ObserveReturnsObservableForSpecifiedProperty
+            // Test Source:	C:\Users\Gyuwon\Documents\Projects\flip\tests\Flip.Mvvm.Tests\ObservableExtensionsTest.cs : line 27
+            // Test Outcome:	Failed
+            // Test Duration:	0:00:00.027
+            //
+            // Result StackTrace:
+            // at Moq.Mock.ThrowVerifyException(MethodCall expected, IEnumerable`1 setups, IEnumerable`1 actualCalls, Expression expression, Times times, Int32 callCount)
+            //    at Moq.Mock.VerifyCalls(Interceptor targetInterceptor, MethodCall expected, Expression expression, Times times)
+            //    at Moq.Mock.Verify[T](Mock`1 mock, Expression`1 expression, Times times, String failMessage)
+            //    at Moq.Mock`1.Verify(Expression`1 expression, Times times)
+            //    at Flip.Tests.ObservableExtensionsTest.ObserveReturnsObservableForSpecifiedProperty(String first, String second) in C:\Users\Gyuwon\Documents\Projects\flip\tests\Flip.Mvvm.Tests\ObservableExtensionsTest.cs:line 34
+            // Result Message:
+            // Moq.MockException :
+            // Expected invocation on the mock once, but was 0 times: f => f.Action<String>(.first)
+            // No setups configured.
+            //
+            // Performed invocations:
+            // IFunctor.Action<String>("second60a9d28d-7c3d-4942-ac99-4a90f1d98814")
+
             var comp = new Component { Foo = first };
             var functor = Mock.Of<IFunctor>();
             comp.Observe(x => x.Foo)?.Subscribe(functor.Action);
