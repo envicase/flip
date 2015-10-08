@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reactive.Concurrency;
 using System.Windows;
 using Flip;
-using Flip.ViewModels;
 
 namespace ContactList
 {
@@ -20,7 +19,7 @@ namespace ContactList
             new Contact(4, "Steve Rogers", "captain@avengers.com"),
         };
 
-        private ReactiveViewModel<Contact, int> _selectedItem;
+        private ContactViewModel _selectedItem;
         private ContactEditorViewModel _editor;
 
         public MainViewModel()
@@ -29,7 +28,7 @@ namespace ContactList
             ReactiveCommand.SchedulerFactory = () => scheduler;
 
             Contacts = (from c in GetSampleData()
-                        select new ReactiveViewModel<Contact, int>(c)).ToList();
+                        select new ContactViewModel(c)).ToList();
 
             this.Observe(c => c.SelectedItem)
                 .Subscribe(i => Editor = i == null ? null :
@@ -43,9 +42,9 @@ namespace ContactList
                 });
         }
 
-        public IEnumerable<ReactiveViewModel<Contact, int>> Contacts { get; }
+        public IEnumerable<ContactViewModel> Contacts { get; }
 
-        public ReactiveViewModel<Contact, int> SelectedItem
+        public ContactViewModel SelectedItem
         {
             get { return _selectedItem; }
             set { SetValue(ref _selectedItem, value); }

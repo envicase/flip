@@ -15,7 +15,7 @@ namespace ContactList
         public ContactEditorViewModel(Contact user)
             : base(user)
         {
-            this.Observe(x => x.Model).Subscribe(_ => ProjectModel());
+            ProjectModel();
         }
 
         private void ProjectModel()
