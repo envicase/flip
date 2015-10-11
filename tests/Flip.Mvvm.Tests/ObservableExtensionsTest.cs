@@ -25,7 +25,7 @@ namespace Flip.Tests
         public void ObserveReturnsObservableForSpecifiedProperty(
             string first, string second)
         {
-            // TODO: 간헐저으로 다음과 같은 메시지와 함께 테스트가 실패합니다.
+            // TODO: 간헐적으로 다음과 같은 메시지와 함께 테스트가 실패합니다.
             //
             // Test Name:	ObserveReturnsObservableForSpecifiedProperty
             // Test FullName:	Flip.Tests.ObservableExtensionsTest.ObserveReturnsObservableForSpecifiedProperty

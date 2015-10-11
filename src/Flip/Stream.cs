@@ -19,7 +19,7 @@ namespace Flip
         where TModel : class, IModel<TId>
         where TId : IEquatable<TId>
     {
-        private sealed class Instance
+        private sealed class Instance : IObserver<TModel>
         {
             private readonly TId _modelId;
             private readonly Subject<IObservable<TModel>> _spout;
@@ -31,42 +31,52 @@ namespace Flip
                 _spout = new Subject<IObservable<TModel>>();
                 _subject = new BehaviorSubject<TModel>(value: null);
 
-                _spout.Switch().Subscribe(OnNext);
+                _spout.Switch().Subscribe(this);
             }
 
             public TId ModelId => _modelId;
 
             public IObserver<IObservable<TModel>> Spout => _spout;
 
-            [SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object[])", Justification = "No argument to be formatted.")]
-            private void OnNext(TModel model)
+            void IObserver<TModel>.OnCompleted()
             {
-                if (model == null)
+                throw new NotSupportedException();
+            }
+
+            void IObserver<TModel>.OnError(Exception error)
+            {
+                throw new NotSupportedException();
+            }
+
+            [SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object[])", Justification = "No argument to be formatted.")]
+            void IObserver<TModel>.OnNext(TModel value)
+            {
+                if (value == null)
                 {
-                    throw new ArgumentNullException(nameof(model));
+                    throw new ArgumentNullException(nameof(value));
                 }
-                if (model.Id == null)
+                if (value.Id == null)
                 {
                     var message =
-                        $"{nameof(model)}.{nameof(model.Id)} cannot be null.";
-                    throw new ArgumentException(message, nameof(model));
+                        $"{nameof(value)}.{nameof(value.Id)} cannot be null.";
+                    throw new ArgumentException(message, nameof(value));
                 }
-                if (model.Id.Equals(_modelId) == false)
+                if (value.Id.Equals(_modelId) == false)
                 {
                     var message =
-                        $"{nameof(model)}.{nameof(model.Id)}({model.Id})"
+                        $"{nameof(value)}.{nameof(value.Id)}({value.Id})"
                         + $" is not equal to ({_modelId}).";
-                    throw new ArgumentException(message, nameof(model));
+                    throw new ArgumentException(message, nameof(value));
                 }
 
                 var comparer = EqualityComparerSafe;
 
-                if (comparer.Equals(model, _subject.Value))
+                if (comparer.Equals(value, _subject.Value))
                 {
                     return;
                 }
 
-                var next = CoalesceWithLast(model);
+                var next = CoalesceWithLast(value);
 
                 if (comparer.Equals(next, _subject.Value))
                 {
