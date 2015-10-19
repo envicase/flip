@@ -16,7 +16,7 @@ namespace Flip.Tests
     using static Stream<User, string>;
     using static Times;
 
-    [Collection("Using Stream<User, string>")]
+    [Collection("using Stream<User, string>")]
     [ClearStreamAfterTest(typeof(User), typeof(string))]
     public class StreamTest
     {
