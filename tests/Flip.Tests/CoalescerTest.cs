@@ -11,7 +11,7 @@ namespace Flip.Tests
         public void CoalesceReturnsLeftForNonCoalescable(User left, User right)
         {
             var sut = Coalescer<User>.Default;
-            var actual = sut.Coalesce(left, right);
+            User actual = sut.Coalesce(left, right);
             actual.Should().BeSameAs(left);
         }
 
@@ -21,7 +21,7 @@ namespace Flip.Tests
             var left = new UserCoalescable(right.Id, right.UserName, null);
             var sut = Coalescer<UserCoalescable>.Default;
 
-            var actual = sut.Coalesce(left, right);
+            UserCoalescable actual = sut.Coalesce(left, right);
 
             actual.ShouldBeEquivalentTo(
                 new { left.Id, left.UserName, right.Bio });

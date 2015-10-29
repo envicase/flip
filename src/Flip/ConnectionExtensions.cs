@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
+using System.Threading.Tasks;
 
 namespace Flip
 {
@@ -31,6 +33,30 @@ namespace Flip
             }
 
             connection.Emit(Observable.Return(model));
+        }
+
+        /// <summary>
+        /// 지정한 스트림 연결을 통해 지연 평가된 새 모델 개정 인스턴스를 방출합니다.
+        /// </summary>
+        /// <typeparam name="TModel">모델 형식입니다.</typeparam>
+        /// <typeparam name="TId">모델 식별자 형식입니다.</typeparam>
+        /// <param name="connection">모델 스트림 연결입니다.</param>
+        /// <param name="future">지연 평가된 모델 개정 인스턴스입니다.</param>
+        public static void Emit<TModel, TId>(
+            this IConnection<TModel, TId> connection, Task<TModel> future)
+            where TModel : class, IModel<TId>
+            where TId : IEquatable<TId>
+        {
+            if (connection == null)
+            {
+                throw new ArgumentNullException(nameof(connection));
+            }
+            if (future == null)
+            {
+                throw new ArgumentNullException(nameof(future));
+            }
+
+            connection.Emit(future.ToObservable());
         }
     }
 }

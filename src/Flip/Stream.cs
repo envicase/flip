@@ -69,14 +69,14 @@ namespace Flip
                     throw new ArgumentException(message, nameof(value));
                 }
 
-                var comparer = EqualityComparerSafe;
+                IEqualityComparer<TModel> comparer = EqualityComparerSafe;
 
                 if (comparer.Equals(value, _subject.Value))
                 {
                     return;
                 }
 
-                var next = CoalesceWithLast(value);
+                TModel next = CoalesceWithLast(value);
 
                 if (comparer.Equals(next, _subject.Value))
                 {
@@ -93,7 +93,7 @@ namespace Flip
                     return model;
                 }
 
-                var result = CoalescerSafe.Coalesce(model, _subject.Value);
+                TModel result = CoalescerSafe.Coalesce(model, _subject.Value);
                 if (result.Id.Equals(_modelId) == false)
                 {
                     throw InvalidCoalescingResultId;
@@ -255,7 +255,7 @@ namespace Flip
         {
             lock (_syncRoot)
             {
-                foreach (var stream in _store.Values)
+                foreach (Instance stream in _store.Values)
                 {
                     stream.Dispose();
                 }
