@@ -38,7 +38,7 @@ namespace Flip
             Expression<Func<TComponent, TProperty>> propertyExpression)
             where TComponent : INotifyPropertyChanged
         {
-            var propertyName = GetMemberName(propertyExpression.Body);
+            string propertyName = GetMemberName(propertyExpression.Body);
             if (propertyName == null)
             {
                 throw new ArgumentException(
@@ -46,16 +46,17 @@ namespace Flip
                     paramName: nameof(propertyExpression));
             }
 
-            var compiled = propertyExpression.Compile();
+            Func<TComponent, TProperty> compiled = propertyExpression.Compile();
 
-            var source = Observable.FromEventPattern<PropertyChangedEventArgs>(
-                component, nameof(component.PropertyChanged));
+            IObservable<TComponent> source =
+                from e in Observable.FromEventPattern<PropertyChangedEventArgs>(
+                    component, nameof(component.PropertyChanged))
+                where e.EventArgs.PropertyName == propertyName
+                select component;
 
             return Observable
                 .Start(() => compiled.Invoke(component))
-                .Concat(from e in source
-                        where e.EventArgs.PropertyName == propertyName
-                        select compiled.Invoke(component));
+                .Concat(source.Select(compiled));
         }
 
         /// <summary>
