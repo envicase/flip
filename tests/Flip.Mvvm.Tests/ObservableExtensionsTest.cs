@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using FluentAssertions;
 using Moq;
 using Ploeh.AutoFixture.Xunit2;
@@ -6,6 +8,7 @@ using Xunit;
 
 namespace Flip.Tests
 {
+    using static Scheduler;
     using static Times;
 
     public class ObservableExtensionsTest
@@ -49,7 +52,10 @@ namespace Flip.Tests
 
             var comp = new Component { Foo = first };
             var functor = Mock.Of<IFunctor>();
-            comp.Observe(x => x.Foo)?.Subscribe(functor.Action);
+            comp.Observe(x => x.Foo)?
+                .ObserveOn(Immediate)
+                .SubscribeOn(Immediate)
+                .Subscribe(functor.Action);
 
             comp.Foo = second;
 
@@ -71,6 +77,8 @@ namespace Flip.Tests
             var comp = new Component { Foo = string.Empty };
             var functor = Mock.Of<IFunctor>();
             comp.Observe(x => x.Foo, s => string.IsNullOrWhiteSpace(s))?
+                .ObserveOn(Immediate)
+                .SubscribeOn(Immediate)
                 .Subscribe(functor.Action);
 
             comp.Foo = "Hello World";
