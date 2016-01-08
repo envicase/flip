@@ -170,12 +170,7 @@ namespace Flip
                               select m;
                 _subscription = _stream.Subscribe(_subject);
             }
-
-            ~Connection()
-            {
-                Dispose();
-            }
-
+            
             public TId ModelId => _stream.ModelId;
 
             public void Emit(IObservable<TModel> source)
@@ -201,7 +196,6 @@ namespace Flip
             public void Dispose()
             {
                 _subscription.Dispose();
-                GC.SuppressFinalize(this);
             }
         }
 
