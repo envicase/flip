@@ -12,6 +12,7 @@ using Xunit;
 
 namespace Flip.Tests
 {
+    using System.Reactive.Concurrency;
     using static It;
     using static Stream<User, string>;
     using static Times;
@@ -46,8 +47,12 @@ namespace Flip.Tests
         [Theory, AutoData]
         public void ConnectReturnsConnection(string id)
         {
+            // Arrange
+
+            // Act
             IConnection<User, string> connection = Connect(id);
 
+            // Assert
             connection.Should().NotBeNull();
             connection.ModelId.Should().Be(id);
         }
@@ -57,7 +62,7 @@ namespace Flip.Tests
         {
             IConnection<User, string> connection = Connect(user.Id);
             var observer = Mock.Of<IObserver<User>>();
-            connection.Subscribe(observer);
+            connection.SubscribeOn(Scheduler.Immediate).Subscribe(observer);
 
             Connect(user.Id).Emit(user);
 

@@ -13,13 +13,6 @@ namespace Flip.Tests
 {
     public class ObservableExtensionsTest
     {
-        private readonly ITestOutputHelper _output;
-
-        public ObservableExtensionsTest(ITestOutputHelper output)
-        {
-            _output = output;
-        }
-
         public class Component : ObservableObject
         {
             private string _foo;
@@ -31,56 +24,21 @@ namespace Flip.Tests
             }
         }
 
-        [Fact]
-        public void ObserveReturnsObservableForSpecifiedProperty()
+        [Theory, AutoData]
+        public void ObserveReturnsObservableForSpecifiedProperty(
+            string first, string second)
         {
-            // TODO: 간헐적으로 다음과 같은 메시지와 함께 테스트가 실패합니다.
-            //
-            // Test Name:	ObserveReturnsObservableForSpecifiedProperty
-            // Test FullName:	Flip.Tests.ObservableExtensionsTest.ObserveReturnsObservableForSpecifiedProperty
-            // Test Source:	C:\Users\Gyuwon\Documents\Projects\flip\tests\Flip.Mvvm.Tests\ObservableExtensionsTest.cs : line 27
-            // Test Outcome:	Failed
-            // Test Duration:	0:00:00.027
-            //
-            // Result StackTrace:
-            // at Moq.Mock.ThrowVerifyException(MethodCall expected, IEnumerable`1 setups, IEnumerable`1 actualCalls, Expression expression, Times times, Int32 callCount)
-            //    at Moq.Mock.VerifyCalls(Interceptor targetInterceptor, MethodCall expected, Expression expression, Times times)
-            //    at Moq.Mock.Verify[T](Mock`1 mock, Expression`1 expression, Times times, String failMessage)
-            //    at Moq.Mock`1.Verify(Expression`1 expression, Times times)
-            //    at Flip.Tests.ObservableExtensionsTest.ObserveReturnsObservableForSpecifiedProperty(String first, String second) in C:\Users\Gyuwon\Documents\Projects\flip\tests\Flip.Mvvm.Tests\ObservableExtensionsTest.cs:line 34
-            // Result Message:
-            // Moq.MockException :
-            // Expected invocation on the mock once, but was 0 times: f => f.Action<String>(.first)
-            // No setups configured.
-            //
-            // Performed invocations:
-            // IFunctor.Action<String>("second60a9d28d-7c3d-4942-ac99-4a90f1d98814")
-
-            _output.WriteLine("Start");
-            _output.WriteLine($"Current thread id: {Thread.CurrentThread.ManagedThreadId}");
-
-            // Arrange
-            var comp = new Component { Foo = "Hello" };
+            var comp = new Component { Foo = first };
             var functor = Mock.Of<IFunctor>();
-            comp.Observe(x => x.Foo)?
-                .ObserveOn(Immediate)
+            comp.Observe(x => x.Foo, Immediate)?
                 .SubscribeOn(Immediate)
-                .Subscribe(value =>
-                {
-                    _output.WriteLine("Subscribe");
-                    _output.WriteLine($"value: {value}");
-                    _output.WriteLine($"Current thread id: {Thread.CurrentThread.ManagedThreadId}");
-                    functor.Action(value);
-                });
+                .ObserveOn(Immediate)
+                .Subscribe(functor.Action);
 
-            // Act
-            comp.Foo = "World";
+            comp.Foo = second;
 
-            // Assert
-            Mock.Get(functor).Verify(f => f.Action("Hello"), Once());
-            Mock.Get(functor).Verify(f => f.Action("World"), Once());
-
-            _output.WriteLine("Finish");
+            Mock.Get(functor).Verify(f => f.Action(first), Once());
+            Mock.Get(functor).Verify(f => f.Action(second), Once());
         }
 
         [Fact]
@@ -96,9 +54,12 @@ namespace Flip.Tests
         {
             var comp = new Component { Foo = string.Empty };
             var functor = Mock.Of<IFunctor>();
-            comp.Observe(x => x.Foo, s => string.IsNullOrWhiteSpace(s))?
-                .ObserveOn(Immediate)
+            comp.Observe(
+                    x => x.Foo,
+                    s => string.IsNullOrWhiteSpace(s),
+                    Immediate)?
                 .SubscribeOn(Immediate)
+                .ObserveOn(Immediate)
                 .Subscribe(functor.Action);
 
             comp.Foo = "Hello World";
