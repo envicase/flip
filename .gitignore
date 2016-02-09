@@ -8,6 +8,9 @@
 # nuget cache
 packages/
 
+# nuget packages
+*.nupkg
+
 # outputs
 [Bb]in/
 [Ob]bj/
