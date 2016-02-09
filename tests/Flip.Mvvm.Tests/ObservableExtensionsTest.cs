@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Reactive.Linq;
-using System.Threading;
 using FluentAssertions;
 using Moq;
 using Ploeh.AutoFixture.Xunit2;
 using Xunit;
-using Xunit.Abstractions;
 using static System.Reactive.Concurrency.Scheduler;
 using static Moq.Times;
 
