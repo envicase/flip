@@ -1,18 +1,25 @@
 ﻿using System;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Threading;
 using FluentAssertions;
 using Moq;
 using Ploeh.AutoFixture.Xunit2;
 using Xunit;
+using Xunit.Abstractions;
+using static System.Reactive.Concurrency.Scheduler;
+using static Moq.Times;
 
 namespace Flip.Tests
 {
-    using static Scheduler;
-    using static Times;
-
     public class ObservableExtensionsTest
     {
+        private readonly ITestOutputHelper _output;
+
+        public ObservableExtensionsTest(ITestOutputHelper output)
+        {
+            _output = output;
+        }
+
         public class Component : ObservableObject
         {
             private string _foo;
@@ -24,9 +31,8 @@ namespace Flip.Tests
             }
         }
 
-        [Theory, AutoData]
-        public void ObserveReturnsObservableForSpecifiedProperty(
-            string first, string second)
+        [Fact]
+        public void ObserveReturnsObservableForSpecifiedProperty()
         {
             // TODO: 간헐적으로 다음과 같은 메시지와 함께 테스트가 실패합니다.
             //
@@ -50,17 +56,31 @@ namespace Flip.Tests
             // Performed invocations:
             // IFunctor.Action<String>("second60a9d28d-7c3d-4942-ac99-4a90f1d98814")
 
-            var comp = new Component { Foo = first };
+            _output.WriteLine("Start");
+            _output.WriteLine($"Current thread id: {Thread.CurrentThread.ManagedThreadId}");
+
+            // Arrange
+            var comp = new Component { Foo = "Hello" };
             var functor = Mock.Of<IFunctor>();
             comp.Observe(x => x.Foo)?
                 .ObserveOn(Immediate)
                 .SubscribeOn(Immediate)
-                .Subscribe(functor.Action);
+                .Subscribe(value =>
+                {
+                    _output.WriteLine("Subscribe");
+                    _output.WriteLine($"value: {value}");
+                    _output.WriteLine($"Current thread id: {Thread.CurrentThread.ManagedThreadId}");
+                    functor.Action(value);
+                });
 
-            comp.Foo = second;
+            // Act
+            comp.Foo = "World";
 
-            Mock.Get(functor).Verify(f => f.Action(first), Once());
-            Mock.Get(functor).Verify(f => f.Action(second), Once());
+            // Assert
+            Mock.Get(functor).Verify(f => f.Action("Hello"), Once());
+            Mock.Get(functor).Verify(f => f.Action("World"), Once());
+
+            _output.WriteLine("Finish");
         }
 
         [Fact]
@@ -72,7 +92,7 @@ namespace Flip.Tests
         }
 
         [Theory, AutoData]
-        public void ObserveReturnsObservableOfProjectionForSpecifiedProperty()
+        public void ObserveReturnsProjectedObservableForSpecifiedProperty()
         {
             var comp = new Component { Foo = string.Empty };
             var functor = Mock.Of<IFunctor>();
