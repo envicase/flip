@@ -37,5 +37,16 @@ namespace Flip
                     : true
                 : false;
         }
+
+        public override int GetHashCode() =>
+            _hasValue ? EqualityComparer<T>.Default.GetHashCode(_value) : 0;
+
+        public override bool Equals(object obj) =>
+            obj is Option<T> ? Equals((Option<T>)obj) : false;
+
+        public static bool operator ==(Option<T> x, Option<T> y) => x.Equals(y);
+
+        public static bool operator !=(Option<T> x, Option<T> y) =>
+            false == x.Equals(y);
     }
 }

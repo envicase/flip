@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using FluentAssertions;
 using Ploeh.AutoFixture.Xunit2;
 using Xunit;
@@ -115,6 +116,26 @@ namespace Flip.Tests
             Option<string> y = yValue;
 
             bool actual = x.Equals(y);
+
+            actual.Should().Be(expected);
+        }
+
+        [Fact]
+        public void GetHashCodeReturnsZeroForNone()
+        {
+            Option<string> sut = null;
+            int actual = sut.GetHashCode();
+            actual.Should().Be(0);
+        }
+
+        [Theory, AutoData]
+        public void GetHashCodeRelaysToEqualityComparerWithValueForSome(
+            string value)
+        {
+            Option<string> sut = value;
+            int expected = EqualityComparer<string>.Default.GetHashCode(value);
+
+            int actual = sut.GetHashCode();
 
             actual.Should().Be(expected);
         }
