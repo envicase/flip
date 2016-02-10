@@ -6,5 +6,5 @@ using System.Resources;
 [assembly: AssemblyCompany("envicase")]
 [assembly: AssemblyProduct("Flip")]
 [assembly: NeutralResourcesLanguage("en")]
-[assembly: AssemblyVersion("0.0.2.0")]
-[assembly: AssemblyFileVersion("0.0.2.0")]
+[assembly: AssemblyVersion("0.0.2.1")]
+[assembly: AssemblyFileVersion("0.0.2.1")]
