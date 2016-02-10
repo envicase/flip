@@ -42,6 +42,7 @@
     <Compile Include="IConnection.cs" />
     <Compile Include="IModel.cs" />
     <Compile Include="Model.cs" />
+    <Compile Include="Option.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stream.cs" />
     <Compile Include="WeakSubscription.cs" />
