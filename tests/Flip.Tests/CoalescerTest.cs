@@ -18,13 +18,14 @@ namespace Flip.Tests
         [Theory, AutoData]
         public void CoalesceDelegatesToCoalescable(UserCoalescable right)
         {
-            var left = new UserCoalescable(right.Id, right.UserName, null);
+            var left = new UserCoalescable(
+                right.Id, right.UserName, null, null);
             var sut = Coalescer<UserCoalescable>.Default;
 
             UserCoalescable actual = sut.Coalesce(left, right);
 
             actual.ShouldBeEquivalentTo(
-                new { left.Id, left.UserName, right.Bio });
+                new { left.Id, left.UserName, right.Bio, right.Email });
         }
     }
 }

@@ -1,27 +1,26 @@
 ﻿using System;
+using System.ComponentModel;
 using Flip.ViewModels;
 using FluentAssertions;
 using Moq;
 using Ploeh.AutoFixture.Xunit2;
 using Xunit;
+using static Moq.It;
+using static Moq.Times;
 
 namespace Flip.Tests.ViewModels
 {
-    using System.ComponentModel;
-    using static It;
-    using static Times;
-
-    [Collection("using Stream<User, string>")]
-    [ClearStreamAfterTest(typeof(User), typeof(string))]
+    [Collection(nameof(Stream<User, Guid>))]
+    [ClearStreamAfterTest(typeof(User), typeof(Guid))]
     public class ReactiveViewModelTest
     {
         [Theory, AutoData]
-        public void InitializesWithConnection(string id)
+        public void InitializesWithConnection(Guid id)
         {
             var connection =
-                Mock.Of<IConnection<User, string>>(c => c.ModelId == id);
+                Mock.Of<IConnection<User, Guid>>(c => c.ModelId == id);
 
-            var sut = new ReactiveViewModel<User, string>(connection);
+            var sut = new ReactiveViewModel<User, Guid>(connection);
 
             sut.ModelId.Should().Be(id);
             sut.Model.Should().BeNull();
@@ -29,9 +28,9 @@ namespace Flip.Tests.ViewModels
         }
 
         [Theory, AutoData]
-        public void InitializesWithModelId(string id)
+        public void InitializesWithModelId(Guid id)
         {
-            var sut = new ReactiveViewModel<User, string>(id);
+            var sut = new ReactiveViewModel<User, Guid>(id);
 
             sut.ModelId.Should().Be(id);
             sut.Connection.Should().NotBeNull();
@@ -42,12 +41,12 @@ namespace Flip.Tests.ViewModels
         [Theory, AutoData]
         public void InitializesWithModel(User model)
         {
-            IConnection<User, string> connection =
-                Stream<User, string>.Connect(model.Id);
+            IConnection<User, Guid> connection =
+                Stream<User, Guid>.Connect(model.Id);
             var functor = Mock.Of<IFunctor>();
             connection.Subscribe(functor.Action);
 
-            var sut = new ReactiveViewModel<User, string>(model);
+            var sut = new ReactiveViewModel<User, Guid>(model);
 
             sut.ModelId.Should().Be(model.Id);
             sut.Connection.Should().NotBeNull();
@@ -57,10 +56,10 @@ namespace Flip.Tests.ViewModels
         }
 
         [Theory, AutoData]
-        public void WithInitializesWithConnection(string id)
+        public void WithInitializesWithConnection(Guid id)
         {
             var connection =
-                Mock.Of<IConnection<User, string>>(c => c.ModelId == id);
+                Mock.Of<IConnection<User, Guid>>(c => c.ModelId == id);
 
             var sut = ReactiveViewModel.With(connection);
 
@@ -71,17 +70,18 @@ namespace Flip.Tests.ViewModels
         }
 
         [Theory, AutoData]
-        public void SubscribesConnection(string id, string userName, string bio)
+        public void SubscribesConnection(
+            Guid id, string userName, string bio, string email)
         {
-            var user = new User(id, userName, bio);
+            var user = new User(id, userName, bio, email);
             var connection =
-                Mock.Of<IConnection<User, string>>(c => c.ModelId == id);
+                Mock.Of<IConnection<User, Guid>>(c => c.ModelId == id);
             IObserver<User> observer = null;
             Mock.Get(connection)
                 .Setup(c => c.Subscribe(IsAny<IObserver<User>>()))
                 .Callback<IObserver<User>>(p => observer = p);
 
-            var sut = new ReactiveViewModel<User, string>(connection);
+            var sut = new ReactiveViewModel<User, Guid>(connection);
             observer?.OnNext(user);
 
             Mock.Get(connection)
@@ -89,8 +89,8 @@ namespace Flip.Tests.ViewModels
             sut.Model.Should().BeSameAs(user);
         }
 
-        [Collection("using Stream<User, string>")]
-        [ClearStreamAfterTest(typeof(User), typeof(string))]
+        [Collection(nameof(Stream<User, Guid>))]
+        [ClearStreamAfterTest(typeof(User), typeof(Guid))]
         public class ModelSetter
         {
             [Fact]
@@ -106,10 +106,10 @@ namespace Flip.Tests.ViewModels
             [Theory, AutoData]
             public void RaisesEventWithModelChangedEventArgs(User user)
             {
-                var sut = new ReactiveViewModel<User, string>(user.Id);
+                var sut = new ReactiveViewModel<User, Guid>(user.Id);
                 sut.MonitorEvents();
 
-                Stream<User, string>.Connect(user.Id).Emit(user);
+                Stream<User, Guid>.Connect(user.Id).Emit(user);
 
                 sut.ShouldRaisePropertyChangeFor(x => x.Model)
                     .WithArgs<PropertyChangedEventArgs>(args => ReferenceEquals(
@@ -120,7 +120,7 @@ namespace Flip.Tests.ViewModels
         [Fact]
         public void DisposeDisposesConnection()
         {
-            var connection = Mock.Of<IConnection<User, string>>();
+            var connection = Mock.Of<IConnection<User, Guid>>();
             var sut = ReactiveViewModel.With(connection);
 
             sut.Dispose();

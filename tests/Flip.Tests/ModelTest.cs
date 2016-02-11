@@ -8,7 +8,8 @@ namespace Flip.Tests
     public class ModelTest
     {
         [Theory, AutoData]
-        public void SetsIdCorrectly(string id, string userName, string bio) =>
-            new User(id, userName, bio).Id.Should().BeSameAs(id);
+        public void SetsIdCorrectly(
+            Guid id, string userName, string bio, string email) =>
+            new User(id, userName, bio, email).Id.Should().Be(id);
     }
 }

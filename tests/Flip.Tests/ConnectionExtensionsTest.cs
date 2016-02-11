@@ -16,7 +16,7 @@ namespace Flip.Tests
         [Theory AutoData]
         public async Task EmitRelaysWithModelInstance(User user)
         {
-            var connection = Mock.Of<IConnection<User, string>>();
+            var connection = Mock.Of<IConnection<User, Guid>>();
             IObservable<User> observable = null;
             Mock.Get(connection)
                 .Setup(x => x.Emit(IsAny<IObservable<User>>()))
@@ -33,7 +33,7 @@ namespace Flip.Tests
         [Theory, AutoData]
         public async Task EmitRelaysWithFuture(User user)
         {
-            var connection = Mock.Of<IConnection<User, string>>();
+            var connection = Mock.Of<IConnection<User, Guid>>();
             IObservable<User> observable = null;
             Mock.Get(connection)
                 .Setup(x => x.Emit(IsAny<IObservable<User>>()))

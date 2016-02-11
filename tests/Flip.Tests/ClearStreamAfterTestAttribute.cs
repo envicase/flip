@@ -34,10 +34,8 @@ namespace Flip.Tests
             base.After(methodUnderTest);
 
             var type = typeof(Stream<,>).MakeGenericType(ModelType, IdType);
-            type.GetProperty(nameof(Stream<User, string>.EqualityComparer))
-                .SetValue(null, null);
-            type.GetProperty(nameof(Stream<User, string>.Coalescer))
-                .SetValue(null, null);
+            type.GetProperty("EqualityComparer").SetValue(null, null);
+            type.GetProperty("Coalescer").SetValue(null, null);
             type.GetMethod("Clear").Invoke(null, null);
         }
     }

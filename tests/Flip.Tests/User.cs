@@ -2,22 +2,27 @@
 
 namespace Flip.Tests
 {
-    public class User : Model<string>
+    public class User : Model<Guid>
     {
-        public User(string id, string userName, string bio)
+        public User(
+            Guid id,
+            string userName,
+            Option<string>? bio,
+            Option<string>? email)
             : base(id)
         {
             if (userName == null)
-            {
                 throw new ArgumentNullException(nameof(userName));
-            }
 
             UserName = userName;
             Bio = bio;
+            Email = email;
         }
 
-        public string UserName { get; }
+        public string UserName { get; set; }
 
-        public string Bio { get; }
+        public Option<string>? Bio { get; set; }
+
+        public Option<string>? Email { get; set; }
     }
 }
