@@ -24,5 +24,7 @@ namespace Flip.Tests
         public Option<string>? Bio { get; }
 
         public Option<string>? Email { get; }
+
+        public Option<string>? Website { get; set; }
     }
 }

@@ -31,7 +31,10 @@ namespace Flip.Tests
                 Id,
                 UserName ?? right.UserName,
                 Bio ?? right.Bio,
-                Email ?? right.Email);
+                Email ?? right.Email)
+            {
+                Website = Website ?? right.Website
+            };
         }
     }
 }
