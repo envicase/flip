@@ -1,10 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Reactive.Linq;
 using Flip.ViewModels;
 using FluentAssertions;
 using Moq;
 using Ploeh.AutoFixture.Xunit2;
 using Xunit;
+using static System.Reactive.Concurrency.Scheduler;
 using static Moq.It;
 using static Moq.Times;
 
@@ -30,8 +32,12 @@ namespace Flip.Tests.ViewModels
         [Theory, AutoData]
         public void InitializesWithModelId(Guid id)
         {
+            // Arrange
+
+            // Act
             var sut = new ReactiveViewModel<User, Guid>(id);
 
+            // Assert
             sut.ModelId.Should().Be(id);
             sut.Connection.Should().NotBeNull();
             sut.Connection.ModelId.Should().Be(id);
@@ -44,7 +50,7 @@ namespace Flip.Tests.ViewModels
             IConnection<User, Guid> connection =
                 Stream<User, Guid>.Connect(model.Id);
             var functor = Mock.Of<IFunctor>();
-            connection.Subscribe(functor.Action);
+            connection.SubscribeOn(Immediate).Subscribe(functor.Action);
 
             var sut = new ReactiveViewModel<User, Guid>(model);
 
@@ -96,8 +102,12 @@ namespace Flip.Tests.ViewModels
             [Fact]
             public void ModelSetterIsPrivate()
             {
+                // Arrange
                 var sut = typeof(ReactiveViewModel<,>).GetProperty("Model");
 
+                // Act
+
+                // Assert
                 sut.Should().NotBeNull();
                 sut.SetMethod.Should().NotBeNull();
                 sut.SetMethod.IsPrivate.Should().BeTrue();
