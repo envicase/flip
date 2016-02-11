@@ -19,10 +19,10 @@ namespace Flip.Tests
             Email = email;
         }
 
-        public string UserName { get; set; }
+        public string UserName { get; }
 
-        public Option<string>? Bio { get; set; }
+        public Option<string>? Bio { get; }
 
-        public Option<string>? Email { get; set; }
+        public Option<string>? Email { get; }
     }
 }
