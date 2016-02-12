@@ -27,6 +27,18 @@ namespace Flip.Tests
         }
 
         [Theory, AutoData]
+        public void CoalesceUsesLeftPropertyValueIfLeftPropertyValueIsNotNull(
+            User left, User right)
+        {
+            var sut = Coalescer<User>.Default;
+
+            User actual = sut.Coalesce(left, right);
+
+            actual.Should().NotBeSameAs(left);
+            actual.ShouldBeEquivalentTo(left);
+        }
+
+        [Theory, AutoData]
         public void CoalesceUsesRightPropertyValueIfLeftPropertyValueIsNull(
             Guid id, string userName, string bio, string email, string website)
         {
@@ -39,33 +51,6 @@ namespace Flip.Tests
 
             actual.ShouldBeEquivalentTo(
                 new User(id, userName, bio, email) { Website = website });
-        }
-
-        [Theory, AutoData]
-        public void CoalesceUsesLeftPropertyValueIfRightPropertyValueIsNull(
-            Guid id, string userName, string bio, string email, string website)
-        {
-            var left = new User(id, userName, bio, email);
-            left.Website = website;
-            var right = new User(id, userName, null, null);
-            var sut = Coalescer<User>.Default;
-
-            User actual = sut.Coalesce(left, right);
-
-            actual.ShouldBeEquivalentTo(
-                new User(id, userName, bio, email) { Website = website });
-        }
-
-        [Theory, AutoData]
-        public void CoalesceUsesLeftPropertyValueIfLeftPropertyValueIsNotNull(
-            User left, User right)
-        {
-            var sut = Coalescer<User>.Default;
-
-            User actual = sut.Coalesce(left, right);
-
-            actual.Should().NotBeSameAs(left);
-            actual.ShouldBeEquivalentTo(left);
         }
     }
 }
