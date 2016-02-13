@@ -37,10 +37,14 @@
   <ItemGroup>
     <Compile Include="Coalescer.cs" />
     <Compile Include="ConnectionExtensions.cs" />
+    <Compile Include="InitExpressionError.cs" />
+    <Compile Include="InitExpressionFactory.cs" />
+    <Compile Include="InitExpressionResult.cs" />
     <Compile Include="ICoalescable.cs" />
     <Compile Include="ICoalescer.cs" />
     <Compile Include="IConnection.cs" />
     <Compile Include="IModel.cs" />
+    <Compile Include="InternalReflectionExtensions.cs" />
     <Compile Include="Model.cs" />
     <Compile Include="Option.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
