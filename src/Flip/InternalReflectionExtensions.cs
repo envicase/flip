@@ -18,11 +18,10 @@ namespace Flip
         public static string GetFriendlyName(this Type type)
         {
             /*
-             * TODO: 아직 구현되지 않았습니다.
+             * TODO: #12
+             * https://github.com/envicase/flip/issues/12
              * 이 메서드가 구현되면 제네릭 형식에 대해서 C# 문법을 따르는
-             * 읽기 용이한 형 이름을 반환해야 합니다. 예를 들어
-             * Dictionary<int, string> 형식에 대해서 'Dictionary`2'가 아닌
-             * 'Dictionary<int, string>'가 반환되어야 합니다.
+             * 읽기 용이한 형 이름을 반환해야 합니다.
              */
 
             return type.Name;
@@ -31,11 +30,10 @@ namespace Flip
         public static string GetConstructorName(this Type type)
         {
             /*
-             * TODO: 아직 구현되지 않았습니다.
+             * TODO: #13
+             * https://github.com/envicase/flip/issues/13
              * 이 메서드가 구현되면 제네릭 형식에 대해서 C# 문법을 따르는
-             * 생성자 이름을 반환해야 합니다. 예를 들어
-             * Dictionary<int, string> 형식에 대해서 '.ctor'나
-             * 'Dictionary`2'가 아닌 'Dictionary'가 반환되어야 합니다.
+             * 생성자 이름을 반환해야 합니다.
              */
 
             return type.Name;
@@ -44,13 +42,10 @@ namespace Flip
         public static string GetFriendlyName(this ConstructorInfo constructor)
         {
             /*
-             * TODO: 아직 구현되지 않았습니다.
+             * TODO: #14
+             * https://github.com/envicase/flip/issues/14
              * 이 메서드가 구현되면 제네릭 형식에 대해서 C# 문법을 따르는
-             * 읽기 용이한 형 이름을 반환해야 합니다. 예를 들어
-             * public List(IEnumerable<int> collection) 생성자에 대해서
-             * 'Void .ctor(System.Collections.Generic.IEnumerable`1[System.Int32])'가
-             * 아닌 'public List(IEnumerable<int> collection)'가
-             * 반환되어야 합니다.
+             * 읽기 용이한 생성자 오버로드 이름을 반환해야 합니다.
              */
 
             return constructor.ToString();
