@@ -88,7 +88,7 @@ namespace Flip
                 if (property == null)
                 {
                     InitExpressionError error =
-                        GetNoPropertyFoundMatchesParameter(
+                        GetNoPropertyMatchesParameterError(
                             constructor, parameter);
                     return InitExpressionResult<Func<T, T, T>>.WithError(error);
                 }
@@ -117,7 +117,7 @@ namespace Flip
             return new InitExpressionResult<Func<T, T, T>>(lambdaExpression);
         }
 
-        private static InitExpressionError GetNoPropertyFoundMatchesParameter(
+        private static InitExpressionError GetNoPropertyMatchesParameterError(
             ConstructorInfo constructor, ParameterInfo parameter)
         {
             var message = new StringBuilder();
