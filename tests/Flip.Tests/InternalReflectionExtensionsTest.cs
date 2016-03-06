@@ -44,5 +44,18 @@ namespace Flip.Tests
         {
             type.GetFriendlyName().Should().BeEquivalentTo(expected);
         }
+
+        [Theory]
+        [InlineData(typeof(INonGeneric), nameof(INonGeneric))]
+        [InlineData(typeof(NonGeneric), nameof(NonGeneric))]
+        [InlineData(typeof(NestedComplexGenerics<NestedGenerics<SimpleGeneric<NonGeneric>, NonGeneric>, SimpleGeneric<NonGeneric>, NonGeneric>), "NestedComplexGenerics")]
+        [InlineData(typeof(Dictionary<int, string>), "Dictionary")]
+        [InlineData(typeof(Dictionary<Int32, String>), "Dictionary")]
+        [InlineData(typeof(List<int?>), "List")]
+        [InlineData(typeof(List<Nullable<Int32>>), "List")]
+        public void GetConstructorNameReturnsPlainTypeName(Type type, string expected)
+        {
+            type.GetConstructorName().Should().BeEquivalentTo(expected);
+        }
     }
 }
