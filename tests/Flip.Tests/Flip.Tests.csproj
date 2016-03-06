@@ -107,6 +107,7 @@
     <Compile Include="CoalescerTest.cs" />
     <Compile Include="ConnectionExtensionsTest.cs" />
     <Compile Include="IFunctor.cs" />
+    <Compile Include="InternalReflectionExtensionsTest.cs" />
     <Compile Include="ModelTest.cs" />
     <Compile Include="OptionTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
