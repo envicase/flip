@@ -29,6 +29,11 @@ namespace Flip
 
         public static string GetConstructorName(this Type type)
         {
+            if (type.GetTypeInfo().IsInterface)
+            {
+                throw new InvalidOperationException(
+                    $"type cannot be interface.");
+            }
             return type.GenericTypeArguments.Any()
                 ? GetNameWithoutGenericDefinition(type)
                 : type.Name;

@@ -73,7 +73,6 @@ namespace Flip.Tests
         }
 
         [Theory]
-        [InlineData(typeof(INonGeneric), nameof(INonGeneric))]
         [InlineData(typeof(NonGeneric), nameof(NonGeneric))]
         [InlineData(typeof(NestedComplexGenerics<NestedGenerics<SimpleGeneric<NonGeneric>, NonGeneric>, SimpleGeneric<NonGeneric>, NonGeneric>), "NestedComplexGenerics")]
         [InlineData(typeof(Dictionary<int, string>), "Dictionary")]
@@ -83,6 +82,13 @@ namespace Flip.Tests
         public void GetConstructorNameReturnsPlainTypeName(Type type, string expected)
         {
             type.GetConstructorName().Should().BeEquivalentTo(expected);
+        }
+
+        [Fact]
+        public void GetConstructorNameThrowsInvalidOperationExceptionForInterface()
+        {
+            Action action = () => typeof(INonGeneric).GetConstructorName();
+            action.ShouldThrow<InvalidOperationException>();
         }
 
         [Fact]
