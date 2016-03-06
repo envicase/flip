@@ -1,7 +1,9 @@
 ﻿using FluentAssertions;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using Xunit;
+using System.Reflection;
 
 namespace Flip.Tests
 {
@@ -25,6 +27,31 @@ namespace Flip.Tests
             where T1 : NestedGenerics<T2, T3>
             where T2 : SimpleGeneric<T3>
             where T3 : NonGeneric { }
+        internal class BaseConstructors
+        {
+            protected BaseConstructors() { }
+            protected BaseConstructors(int capacity) { }
+        }
+        internal class Constructors<T>
+            : BaseConstructors
+            where T : INestedComplexGenerics<NestedGenerics<SimpleGeneric<NonGeneric>, NonGeneric>, SimpleGeneric<NonGeneric>, NonGeneric>
+        {
+            protected Constructors()
+            {
+            }
+
+            protected Constructors(int capacity) : base(capacity)
+            {
+            }
+
+            public Constructors(
+                int capacity,
+                NonGeneric nonGeneric,
+                SimpleGeneric<List<int>> simple,
+                MultipleGenerics<int, string, Guid> multiple,
+                T complex)
+            { }
+        }
 
         [Theory]
         [InlineData(typeof(INonGeneric), nameof(INonGeneric))]
@@ -56,6 +83,37 @@ namespace Flip.Tests
         public void GetConstructorNameReturnsPlainTypeName(Type type, string expected)
         {
             type.GetConstructorName().Should().BeEquivalentTo(expected);
+        }
+
+        [Fact]
+        public void GetFriendlyNameForSimpleConstructorInfo()
+        {
+            var type = typeof(Constructors<NestedComplexGenerics<NestedGenerics<SimpleGeneric<NonGeneric>, NonGeneric>, SimpleGeneric<NonGeneric>, NonGeneric>>);
+            var constructor = type
+                .GetConstructors(BindingFlags.Instance | BindingFlags.NonPublic)
+                .OrderBy(c => c.GetParameters().Length)
+                .First();
+            constructor.GetFriendlyName()
+                .Should()
+                .BeEquivalentTo("Constructors()");
+        }
+
+        [Fact]
+        public void GetFriendlyNameForComplexConstructorInfo()
+        {
+            var type = typeof(Constructors<NestedComplexGenerics<NestedGenerics<SimpleGeneric<NonGeneric>, NonGeneric>, SimpleGeneric<NonGeneric>, NonGeneric>>);
+            var constructor = type
+                .GetConstructors()
+                .OrderByDescending(c => c.GetParameters().Length)
+                .First();
+            var expected = "Constructors("
+                + "Int32 capacity, "
+                + "NonGeneric nonGeneric, "
+                + "SimpleGeneric<List<Int32>> simple, "
+                + "MultipleGenerics<Int32, String, Guid> multiple, "
+                + "NestedComplexGenerics<NestedGenerics<SimpleGeneric<NonGeneric>, NonGeneric>, SimpleGeneric<NonGeneric>, NonGeneric> complex"
+                + ")";
+            constructor.GetFriendlyName().Should().BeEquivalentTo(expected);
         }
     }
 }

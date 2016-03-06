@@ -36,14 +36,12 @@ namespace Flip
 
         public static string GetFriendlyName(this ConstructorInfo constructor)
         {
-            /*
-             * TODO: #14
-             * https://github.com/envicase/flip/issues/14
-             * 이 메서드가 구현되면 제네릭 형식에 대해서 C# 문법을 따르는
-             * 읽기 용이한 생성자 오버로드 이름을 반환해야 합니다.
-             */
-
-            return constructor.ToString();
+            var parameterDefinitions = string.Join(
+                ", ",
+                from p in constructor.GetParameters()
+                select $"{p.ParameterType.GetFriendlyName()} {p.Name}");
+            var typeName = constructor.DeclaringType.GetConstructorName();
+            return $"{typeName}({parameterDefinitions})";
         }
 
         private static string GetNameWithoutGenericDefinition(Type type)
