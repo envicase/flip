@@ -86,7 +86,7 @@ namespace Flip.Tests
         [InlineData(typeof(Dictionary<Int32, String>), "Dictionary<Int32, String>")]
         [InlineData(typeof(List<Nullable<int>>), "List<Nullable<Int32>>")]
         [InlineData(typeof(List<int?>), "List<Nullable<Int32>>")]
-        public void GetFriendlyNameShouldBeFriendly(Type type, string expected)
+        public void GetFriendlyName_returns_friendly_type_name(Type type, string expected)
         {
             type.GetFriendlyName().Should().BeEquivalentTo(expected);
         }
@@ -98,20 +98,20 @@ namespace Flip.Tests
         [InlineData(typeof(Dictionary<Int32, String>), "Dictionary")]
         [InlineData(typeof(List<int?>), "List")]
         [InlineData(typeof(List<Nullable<Int32>>), "List")]
-        public void GetConstructorNameReturnsPlainTypeName(Type type, string expected)
+        public void GetConstructorName_returns_plain_type_name(Type type, string expected)
         {
             type.GetConstructorName().Should().BeEquivalentTo(expected);
         }
 
         [Fact]
-        public void GetConstructorNameThrowsInvalidOperationExceptionForInterface()
+        public void GetConstructorName_throws_InvalidOperationException_for_interface()
         {
             Action action = () => typeof(INonGeneric).GetConstructorName();
             action.ShouldThrow<InvalidOperationException>();
         }
 
         [Fact]
-        public void GetFriendlyNameForSimpleConstructorInfo()
+        public void GetFriendlyName_works_correctly_for_simple_constructor()
         {
             var type = typeof(Constructors<NestedComplexGenerics<NestedGenerics<SimpleGeneric<NonGeneric>, NonGeneric>, SimpleGeneric<NonGeneric>, NonGeneric>>);
             var constructor = type
@@ -124,7 +124,7 @@ namespace Flip.Tests
         }
 
         [Fact]
-        public void GetFriendlyNameForComplexConstructorInfo()
+        public void GetFriendlyName_works_correctly_for_complex_constructor()
         {
             var type = typeof(Constructors<NestedComplexGenerics<NestedGenerics<SimpleGeneric<NonGeneric>, NonGeneric>, SimpleGeneric<NonGeneric>, NonGeneric>>);
             var constructor = type
