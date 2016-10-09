@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace Flip
 {
@@ -32,7 +31,7 @@ namespace Flip
             Expression = null;
             Function = null;
             Errors = new ReadOnlyCollection<InitExpressionError>(
-                new List<InitExpressionError>(errors));
+                     new List<InitExpressionError>(errors));
         }
 
         public InitExpressionResult(Expression<TDelegate> expression)

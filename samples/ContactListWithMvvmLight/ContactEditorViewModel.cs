@@ -10,11 +10,11 @@ namespace ContactListWithMvvmLight
         private string _editName;
         private string _editEmail;
 
-        public ContactEditorViewModel(Contact user)
-            : base(user.Id)
+        public ContactEditorViewModel(Contact model)
+            : base(model)
         {
-            _editName = user.Name;
-            _editEmail = user.Email;
+            _editName = model.Name;
+            _editEmail = model.Email;
         }
 
         public string EditName

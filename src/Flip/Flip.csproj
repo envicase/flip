@@ -24,7 +24,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Flip.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,20 +36,22 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Coalescer.cs" />
+    <Compile Include="CoalescingFilter.cs" />
+    <Compile Include="ConcurrentStreamFactory.cs" />
     <Compile Include="ConnectionExtensions.cs" />
+    <Compile Include="ICoalescable.cs" />
+    <Compile Include="IModel.cs" />
+    <Compile Include="IConnection.cs" />
     <Compile Include="InitExpressionError.cs" />
     <Compile Include="InitExpressionFactory.cs" />
     <Compile Include="InitExpressionResult.cs" />
-    <Compile Include="ICoalescable.cs" />
-    <Compile Include="ICoalescer.cs" />
-    <Compile Include="IConnection.cs" />
-    <Compile Include="IModel.cs" />
     <Compile Include="InternalReflectionExtensions.cs" />
+    <Compile Include="IStreamFactory.cs" />
+    <Compile Include="IStreamFilter.cs" />
     <Compile Include="Model.cs" />
-    <Compile Include="Option.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Stream.cs" />
+    <Compile Include="StreamFactory.cs" />
+    <Compile Include="StreamFactoryBase.cs" />
     <Compile Include="WeakSubscription.cs" />
   </ItemGroup>
   <ItemGroup>

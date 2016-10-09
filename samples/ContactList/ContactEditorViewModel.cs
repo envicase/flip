@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Reactive.Linq;
 using Flip;
-using Flip.ViewModels;
+using static Flip.CombineOperators;
 
 namespace ContactList
 {
-    using static CombineOperators;
-
-    public class ContactEditorViewModel : ReactiveViewModel<Contact, int>
+    public class ContactEditorViewModel : ContactViewModel
     {
         private string _editName;
         private string _editEmail;
 
-        public ContactEditorViewModel(Contact user)
-            : base(user)
+        public ContactEditorViewModel(Contact model)
+            : base(model)
         {
             ProjectModel();
         }

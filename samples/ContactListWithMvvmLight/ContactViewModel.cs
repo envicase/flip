@@ -7,15 +7,19 @@ namespace ContactListWithMvvmLight
 {
     public class ContactViewModel : ViewModelBase
     {
+        public static readonly StreamFactory<int, Contact> StreamFactory =
+               new StreamFactory<int, Contact>();
+
         private Contact _model;
 
-        public ContactViewModel(int userId)
+        public ContactViewModel(Contact model)
         {
-            Connection = Stream<Contact, int>.Connect(userId);
+            Connection = StreamFactory.Connect(model.Id);
             Connection.Subscribe(m => Model = m);
+            Connection.Emit(model);
         }
 
-        protected IConnection<Contact, int> Connection { get; }
+        protected IConnection<Contact> Connection { get; }
 
         public Contact Model
         {

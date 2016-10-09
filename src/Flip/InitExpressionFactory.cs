@@ -180,9 +180,9 @@ namespace Flip
 
             return results.FirstOrDefault(r => r.IsSuccess)
                 ?? InitExpressionResult<Func<T, T, T>>.WithErrors(
-                    from r in results
-                    from e in r.Errors
-                    select e);
+                   from r in results
+                   from e in r.Errors
+                   select e);
         }
     }
 }

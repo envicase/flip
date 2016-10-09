@@ -1,37 +1,56 @@
-﻿using FluentAssertions;
-using System;
-using System.Linq;
+﻿using System;
 using System.Collections.Generic;
-using Xunit;
+using System.Linq;
 using System.Reflection;
+using FluentAssertions;
+using Xunit;
 
 namespace Flip.Tests
 {
     public class InternalReflectionExtensionsTest
     {
         internal interface INonGeneric { }
+
         internal class Plain { }
+
         internal class NonGeneric : INonGeneric { }
+
         internal class SimpleGeneric<T> { }
+
         internal class MultipleGenerics<T1, T2, T3> { }
+
         internal class SpecifiedGeneric<T>
-            where T : NonGeneric { }
+            where T : NonGeneric
+        { }
+
         internal class NestedGenerics<T1, T2>
-            where T1 : SimpleGeneric<T2> { }
+            where T1 : SimpleGeneric<T2>
+        { }
+
         internal interface INestedComplexGenerics<T1, T2, T3>
             where T1 : NestedGenerics<T2, T3>
             where T2 : SimpleGeneric<T3>
-            where T3 : NonGeneric { }
+            where T3 : NonGeneric
+        { }
+
         internal class NestedComplexGenerics<T1, T2, T3>
             : INestedComplexGenerics<T1, T2, T3>
             where T1 : NestedGenerics<T2, T3>
             where T2 : SimpleGeneric<T3>
-            where T3 : NonGeneric { }
+            where T3 : NonGeneric
+        { }
+
         internal class BaseConstructors
         {
-            protected BaseConstructors() { }
-            protected BaseConstructors(int capacity) { }
+            protected BaseConstructors()
+            {
+            }
+
+            protected BaseConstructors(int capacity)
+            {
+            }
         }
+
         internal class Constructors<T>
             : BaseConstructors
             where T : INestedComplexGenerics<NestedGenerics<SimpleGeneric<NonGeneric>, NonGeneric>, SimpleGeneric<NonGeneric>, NonGeneric>

@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
-using Flip;
 using GalaSoft.MvvmLight;
+using static System.Windows.Visibility;
 
 namespace ContactListWithMvvmLight
 {
-    using static Visibility;
-
     public class MainViewModel : ViewModelBase
     {
         private static Contact[] GetSampleData() => new[]
@@ -23,14 +21,9 @@ namespace ContactListWithMvvmLight
 
         public MainViewModel()
         {
-            var source = GetSampleData();
-            var contacts = new List<ContactViewModel>();
-            foreach (var contact in source)
-            {
-                Stream<Contact, int>.Connect(contact.Id).Emit(contact);
-                contacts.Add(new ContactViewModel(contact.Id));
-            }
-            Contacts = contacts;
+            Contacts = new List<ContactViewModel>(
+                from contact in GetSampleData()
+                select new ContactViewModel(contact));
         }
 
         public IEnumerable<ContactViewModel> Contacts { get; }
@@ -38,6 +31,7 @@ namespace ContactListWithMvvmLight
         public ContactEditorViewModel Editor
         {
             get { return _editor; }
+
             private set
             {
                 if (Set(ref _editor, value))
@@ -51,6 +45,7 @@ namespace ContactListWithMvvmLight
         public ContactViewModel SelectedItem
         {
             get { return _selectedItem; }
+
             set
             {
                 if (Set(ref _selectedItem, value))
