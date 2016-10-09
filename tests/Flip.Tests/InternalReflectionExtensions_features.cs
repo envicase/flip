@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Flip.Tests
 {
-    public class InternalReflectionExtensionsTest
+    public class InternalReflectionExtensions_features
     {
         internal interface INonGeneric { }
 

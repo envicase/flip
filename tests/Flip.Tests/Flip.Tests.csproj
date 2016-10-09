@@ -107,7 +107,7 @@
     <Compile Include="ConcurrentStreamFactory_features.cs" />
     <Compile Include="ConnectionExtensions_features.cs" />
     <Compile Include="Connection_features.cs" />
-    <Compile Include="InternalReflectionExtensionsTest.cs" />
+    <Compile Include="InternalReflectionExtensions_features.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamFactory_features.cs" />
   </ItemGroup>
