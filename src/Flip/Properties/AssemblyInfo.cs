@@ -7,6 +7,6 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCompany("envicase")]
 [assembly: AssemblyProduct("Flip")]
 [assembly: NeutralResourcesLanguage("en")]
-[assembly: AssemblyVersion("0.0.3.0")]
-[assembly: AssemblyFileVersion("0.0.3.0")]
+[assembly: AssemblyVersion("0.1.0.0")]
+[assembly: AssemblyFileVersion("0.1.0.0")]
 [assembly: InternalsVisibleTo("Flip.Tests")]
