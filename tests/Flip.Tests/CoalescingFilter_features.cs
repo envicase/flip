@@ -1,10 +1,10 @@
-﻿using System;
-using FluentAssertions;
-using Ploeh.AutoFixture;
-using Xunit;
-
-namespace Flip.Tests
+﻿namespace Flip
 {
+    using System;
+    using FluentAssertions;
+    using Ploeh.AutoFixture;
+    using Xunit;
+
     public class CoalescingFilter_features
     {
         public class UserModel : Model<Guid>

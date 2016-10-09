@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using FluentAssertions;
-using Xunit;
-
-namespace Flip.Tests
+﻿namespace Flip
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+    using FluentAssertions;
+    using Xunit;
+
     public class InternalReflectionExtensions_features
     {
         internal interface INonGeneric { }

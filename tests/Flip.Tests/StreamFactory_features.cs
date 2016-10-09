@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Linq;
-using FluentAssertions;
-using Moq;
-using Ploeh.AutoFixture;
-using Xunit;
-using static Moq.It;
-using static Moq.Times;
-
-namespace Flip.Tests
+﻿namespace Flip
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reactive.Linq;
+    using FluentAssertions;
+    using Moq;
+    using Ploeh.AutoFixture;
+    using Xunit;
+    using static Moq.It;
+    using static Moq.Times;
+
     public class StreamFactory_features
     {
         public class Model : Model<int>

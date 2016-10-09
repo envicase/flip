@@ -1,15 +1,15 @@
-﻿using System;
-using System.Linq;
-using FluentAssertions;
-using Moq;
-using Ploeh.AutoFixture;
-using Xunit;
-using Xunit.Abstractions;
-using static Moq.It;
-using static Moq.Times;
-
-namespace Flip
+﻿namespace Flip
 {
+    using System;
+    using System.Linq;
+    using FluentAssertions;
+    using Moq;
+    using Ploeh.AutoFixture;
+    using Xunit;
+    using Xunit.Abstractions;
+    using static Moq.It;
+    using static Moq.Times;
+
     public class Connection_features
     {
         public class Model : Model<int>

@@ -1,13 +1,13 @@
-﻿using System;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Moq;
-using Xunit;
-using static Moq.It;
-
-namespace Flip.Tests
+﻿namespace Flip
 {
+    using System;
+    using System.Reactive.Linq;
+    using System.Threading.Tasks;
+    using FluentAssertions;
+    using Moq;
+    using Xunit;
+    using static Moq.It;
+
     public class ConnectionExtensions_features
     {
         public class Model

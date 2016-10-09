@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using FluentAssertions;
-using Ploeh.AutoFixture;
-using Xunit;
-
-namespace Flip.Tests
+﻿namespace Flip
 {
+    using System;
+    using System.Collections.Concurrent;
+    using System.Collections.Generic;
+    using System.Linq;
+    using FluentAssertions;
+    using Ploeh.AutoFixture;
+    using Xunit;
+
     public class ConcurrentStreamFactory_features
     {
         public class Model : Model<int>
