@@ -1,13 +1,15 @@
-﻿using System;
-using System.Reactive;
-using System.Reactive.Concurrency;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using System.Threading.Tasks;
-using static System.Reactive.Concurrency.Scheduler;
+﻿#pragma warning disable SA1402 // File may only contain a single class
 
 namespace Flip
 {
+    using System;
+    using System.Reactive;
+    using System.Reactive.Concurrency;
+    using System.Reactive.Linq;
+    using System.Reactive.Subjects;
+    using System.Threading.Tasks;
+    using static System.Reactive.Concurrency.Scheduler;
+
     public static class ReactiveCommand
     {
         public static Func<IScheduler> SchedulerFactory { get; set; } =
@@ -127,14 +129,14 @@ namespace Flip
 
             return new ReactiveCommand<T>(canExecuteSource, execute);
         }
-    };
+    }
 
     public class ReactiveCommand<T> : IReactiveCommand<T>
     {
-        private Func<object, bool> _canExecute;
-        private readonly Func<object, Task<T>> _execute;
         private readonly Subject<T> _spout;
         private readonly IScheduler _schedulerDelegate;
+        private readonly Func<object, Task<T>> _execute;
+        private Func<object, bool> _canExecute;
 
         public ReactiveCommand(
             IObservable<Func<object, bool>> canExecuteSource,
@@ -146,27 +148,21 @@ namespace Flip
             if (execute == null)
                 throw new ArgumentNullException(nameof(execute));
 
-            _execute = execute;
             _spout = new Subject<T>();
             _schedulerDelegate = new DelegatingScheduler(() => SchedulerSafe);
+            _execute = execute;
 
             canExecuteSource
                 .ObserveOn(_schedulerDelegate)
                 .Subscribe(OnNextCanExecute);
         }
 
+        public event EventHandler CanExecuteChanged;
+
         public IScheduler Scheduler { get; set; } =
             ReactiveCommand.SchedulerFactory?.Invoke() ?? CurrentThread;
 
         private IScheduler SchedulerSafe => Scheduler ?? Immediate;
-
-        private void OnNextCanExecute(Func<object, bool> canExecute)
-        {
-            _canExecute = canExecute;
-            RaiseCanExecuteChanged();
-        }
-
-        public event EventHandler CanExecuteChanged;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "'Raise' prefix is generally used to implement ICommand interface and to expose event fire function for PCLs.")]
         public void RaiseCanExecuteChanged() =>
@@ -199,12 +195,20 @@ namespace Flip
             return _spout.ObserveOn(_schedulerDelegate).Subscribe(observer);
         }
 
-        protected virtual void Dispose(bool disposing) => _spout.Dispose();
-
         public void Dispose()
         {
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
+
+        protected virtual void Dispose(bool disposing) => _spout.Dispose();
+
+        private void OnNextCanExecute(Func<object, bool> canExecute)
+        {
+            _canExecute = canExecute;
+            RaiseCanExecuteChanged();
+        }
     }
 }
+
+#pragma warning restore SA1402 // File may only contain a single class

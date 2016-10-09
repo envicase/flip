@@ -1,10 +1,10 @@
-﻿using System;
-using System.Reactive.Linq;
-using System.Reactive.Threading.Tasks;
-using System.Threading.Tasks;
-
-namespace Flip
+﻿namespace Flip
 {
+    using System;
+    using System.Reactive.Linq;
+    using System.Reactive.Threading.Tasks;
+    using System.Threading.Tasks;
+
     public static class ConnectionExtensions
     {
         public static void Emit<TModel>(

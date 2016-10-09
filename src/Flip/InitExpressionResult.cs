@@ -1,13 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Linq.Expressions;
-
-namespace Flip
+﻿namespace Flip
 {
-    internal class InitExpressionResult<TDelegate> where TDelegate : class
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
+    using System.Linq.Expressions;
+
+    internal class InitExpressionResult<TDelegate>
+        where TDelegate : class
     {
+        public InitExpressionResult(Expression<TDelegate> expression)
+        {
+            if (expression == null)
+                throw new ArgumentNullException(nameof(expression));
+
+            Expression = expression;
+            Function = expression.Compile();
+            Errors = Enumerable.Empty<InitExpressionError>();
+        }
+
+        private InitExpressionResult(IEnumerable<InitExpressionError> errors)
+        {
+            Expression = null;
+            Function = null;
+            Errors = new ReadOnlyCollection<InitExpressionError>(
+                     new List<InitExpressionError>(errors));
+        }
+
+        public bool IsSuccess => Expression != null;
+
+        public Expression<TDelegate> Expression { get; }
+
+        public TDelegate Function { get; }
+
+        public IEnumerable<InitExpressionError> Errors { get; }
+
         public static InitExpressionResult<TDelegate> WithErrors(
             IEnumerable<InitExpressionError> errors)
         {
@@ -25,31 +52,5 @@ namespace Flip
 
             return new InitExpressionResult<TDelegate>(new[] { error });
         }
-
-        private InitExpressionResult(IEnumerable<InitExpressionError> errors)
-        {
-            Expression = null;
-            Function = null;
-            Errors = new ReadOnlyCollection<InitExpressionError>(
-                     new List<InitExpressionError>(errors));
-        }
-
-        public InitExpressionResult(Expression<TDelegate> expression)
-        {
-            if (expression == null)
-                throw new ArgumentNullException(nameof(expression));
-
-            Expression = expression;
-            Function = expression.Compile();
-            Errors = Enumerable.Empty<InitExpressionError>();
-        }
-
-        public bool IsSuccess => Expression != null;
-
-        public Expression<TDelegate> Expression { get; }
-
-        public TDelegate Function { get; }
-
-        public IEnumerable<InitExpressionError> Errors { get; }
     }
 }

@@ -1,14 +1,10 @@
-﻿using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+﻿#pragma warning disable SA1402 // File may only contain a single class
 
 namespace Flip.ViewModels
 {
-    internal static class ReactiveViewModel
-    {
-        public static PropertyChangedEventArgs ModelChangedEventArgs { get; } =
-               new PropertyChangedEventArgs("Model");
-    }
+    using System;
+    using System.ComponentModel;
+    using System.Runtime.CompilerServices;
 
     public class ReactiveViewModel<TId, TModel> : ObservableObject, IDisposable
         where TId : IEquatable<TId>
@@ -45,8 +41,6 @@ namespace Flip.ViewModels
             Dispose(disposing: false);
         }
 
-        protected IConnection<TModel> Connection => _connection;
-
         public TId ModelId => _modelId;
 
         public TModel Model
@@ -68,6 +62,16 @@ namespace Flip.ViewModels
             }
         }
 
+        protected IConnection<TModel> Connection => _connection;
+
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing) => _connection.Dispose();
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void ThrowIfModelHasInvalidId(TModel model)
         {
@@ -79,13 +83,13 @@ namespace Flip.ViewModels
                       + $"{Environment.NewLine} The actual value: {model.Id}");
             }
         }
+    }
 
-        public void Dispose()
-        {
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing) => _connection.Dispose();
+    internal static class ReactiveViewModel
+    {
+        public static PropertyChangedEventArgs ModelChangedEventArgs { get; } =
+               new PropertyChangedEventArgs("Model");
     }
 }
+
+#pragma warning restore SA1402 // File may only contain a single class

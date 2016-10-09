@@ -1,8 +1,8 @@
-﻿using System;
-using System.Linq;
-
-namespace Flip
+﻿namespace Flip
 {
+    using System;
+    using System.Linq;
+
     public class CoalescingFilter<TModel> : IStreamFilter<TModel>
         where TModel : class
     {
@@ -12,6 +12,14 @@ namespace Flip
             _implementor == null
             ? (_implementor = BuildImplementor())
             : _implementor;
+
+        public TModel Execute(TModel newValue, TModel lastValue)
+        {
+            if (newValue == null)
+                throw new ArgumentNullException(nameof(newValue));
+
+            return Implementor.Invoke(newValue, lastValue);
+        }
 
         private static Func<TModel, TModel, TModel> BuildImplementor()
         {
@@ -36,14 +44,6 @@ namespace Flip
 
                 return result.Function.Invoke(newValue, lastValue);
             };
-        }
-
-        public TModel Execute(TModel newValue, TModel lastValue)
-        {
-            if (newValue == null)
-                throw new ArgumentNullException(nameof(newValue));
-
-            return Implementor.Invoke(newValue, lastValue);
         }
     }
 }

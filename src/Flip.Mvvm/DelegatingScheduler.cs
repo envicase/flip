@@ -1,8 +1,8 @@
-﻿using System;
-using System.Reactive.Concurrency;
-
-namespace Flip
+﻿namespace Flip
 {
+    using System;
+    using System.Reactive.Concurrency;
+
     internal class DelegatingScheduler : IScheduler
     {
         private readonly Func<IScheduler> _factory;
@@ -17,9 +17,9 @@ namespace Flip
             _factory = factory;
         }
 
-        private IScheduler Implementor => _factory.Invoke();
-
         public DateTimeOffset Now => Implementor.Now;
+
+        private IScheduler Implementor => _factory.Invoke();
 
         public IDisposable Schedule<TState>(
             TState state, Func<IScheduler, TState, IDisposable> action) =>

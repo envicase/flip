@@ -1,7 +1,9 @@
-﻿using System;
+﻿#pragma warning disable SA1402 // File may only contain a single class
 
 namespace Flip
 {
+    using System;
+
     internal static class WeakSubscription
     {
         public static WeakSubscription<T> Create<T>(
@@ -35,6 +37,8 @@ namespace Flip
             _subscription = observable.Subscribe(OnNext, OnError, OnCompleted);
         }
 
+        public void Dispose() => _subscription.Dispose();
+
         private void OnNext(T value)
         {
             IObserver<T> observer;
@@ -61,7 +65,7 @@ namespace Flip
             else
                 _subscription.Dispose();
         }
-
-        public void Dispose() => _subscription.Dispose();
     }
 }
+
+#pragma warning restore SA1402 // File may only contain a single class

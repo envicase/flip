@@ -1,8 +1,8 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-
-namespace Flip
+﻿namespace Flip
 {
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+
     public static class CombineOperators
     {
         public static bool Or(bool arg1, bool arg2) => arg1 || arg2;

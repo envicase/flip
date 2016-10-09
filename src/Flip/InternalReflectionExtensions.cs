@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-
-namespace Flip
+﻿namespace Flip
 {
+    using System;
+    using System.Linq;
+    using System.Reflection;
+
     internal static class InternalReflectionExtensions
     {
         public static bool IsClass(this Type type) =>
@@ -19,7 +19,7 @@ namespace Flip
         public static string GetFriendlyName(this Type type)
         {
             var argumentNames = string.Join(
-                ", ", 
+                ", ",
                 from t in type.GenericTypeArguments
                 select t.GetFriendlyName());
             return string.IsNullOrEmpty(argumentNames)
@@ -34,6 +34,7 @@ namespace Flip
                 throw new InvalidOperationException(
                     $"type cannot be interface.");
             }
+
             return type.GenericTypeArguments.Any()
                 ? GetNameWithoutGenericDefinition(type)
                 : type.Name;

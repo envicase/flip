@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using System.Runtime.CompilerServices;
-using static System.Environment;
-
-namespace Flip
+﻿namespace Flip
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reactive.Disposables;
+    using System.Reactive.Linq;
+    using System.Reactive.Subjects;
+    using System.Runtime.CompilerServices;
+    using static System.Environment;
+
     public abstract class StreamFactoryBase<TId, TModel> :
         IStreamFactory<TId, TModel>
         where TId : IEquatable<TId>
@@ -17,7 +17,8 @@ namespace Flip
         private readonly Dictionary<TId, Stream> _streams;
         private readonly IStreamFilter<TModel> _filter;
 
-        internal StreamFactoryBase() : this(EmptyFilter.Instance)
+        internal StreamFactoryBase()
+            : this(EmptyFilter.Instance)
         {
         }
 
@@ -40,6 +41,11 @@ namespace Flip
             return new Connection(Invoke(() => GetOrAddStream(modelId)));
         }
 
+        public bool ExistsFor(TId modelId) =>
+            Invoke(() => _streams.ContainsKey(modelId));
+
+        internal virtual T Invoke<T>(Func<T> action) => action.Invoke();
+
         private Stream GetOrAddStream(TId modelId)
         {
             Stream stream;
@@ -48,6 +54,7 @@ namespace Flip
                 stream = new Stream(this, modelId);
                 _streams.Add(modelId, stream);
             }
+
             return stream;
         }
 
@@ -58,11 +65,6 @@ namespace Flip
                  ? false
                  : _streams.Remove(stream.ModelId));
         }
-
-        public bool ExistsFor(TId modelId) =>
-            Invoke(() => _streams.ContainsKey(modelId));
-
-        internal virtual T Invoke<T>(Func<T> action) => action.Invoke();
 
         private sealed class Stream : ISubject<IObservable<TModel>, TModel>
         {
@@ -92,6 +94,31 @@ namespace Flip
 
             internal TModel LastValue => _observable.Value;
 
+            public void OnCompleted()
+            {
+                throw new NotSupportedException();
+            }
+
+            public void OnError(Exception error)
+            {
+                throw new NotSupportedException();
+            }
+
+            public void OnNext(IObservable<TModel> value)
+            {
+                _observer.OnNext(value);
+            }
+
+            public IDisposable Subscribe(IObserver<TModel> observer)
+            {
+                var subscription = _observable.Subscribe(observer);
+                return Disposable.Create(() =>
+                {
+                    subscription.Dispose();
+                    _factory.OnStreamUnsubscribed(this);
+                });
+            }
+
             private TModel Filter(TModel model)
             {
                 if (null == model)
@@ -119,31 +146,6 @@ namespace Flip
                           + $"{NewLine} The expected value: {_modelId}"
                           + $"{NewLine} The actual value: {model.Id}");
                 }
-            }
-
-            public void OnCompleted()
-            {
-                throw new NotSupportedException();
-            }
-
-            public void OnError(Exception error)
-            {
-                throw new NotSupportedException();
-            }
-
-            public void OnNext(IObservable<TModel> value)
-            {
-                _observer.OnNext(value);
-            }
-
-            public IDisposable Subscribe(IObserver<TModel> observer)
-            {
-                var subscription = _observable.Subscribe(observer);
-                return Disposable.Create(() =>
-                {
-                    subscription.Dispose();
-                    _factory.OnStreamUnsubscribed(this);
-                });
             }
         }
 

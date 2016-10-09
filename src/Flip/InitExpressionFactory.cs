@@ -1,15 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
-using static System.Linq.Expressions.Expression;
+﻿#pragma warning disable SA1204 // Static elements must appear before instance elements
 
 namespace Flip
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Linq.Expressions;
+    using System.Reflection;
+    using System.Text;
+    using static System.Linq.Expressions.Expression;
+
     internal class InitExpressionFactory<T>
     {
+        public InitExpressionResult<Func<T, T, T>> CreateCoalesce()
+        {
+            IEnumerable<ConstructorInfo> constructors =
+                typeof(T).GetTypeInfo().DeclaredConstructors;
+
+            var results = new List<InitExpressionResult<Func<T, T, T>>>(
+                from constructor in constructors
+                orderby constructor.GetParameters().Length descending
+                select CreateCoalesceWith(constructor));
+
+            return results.FirstOrDefault(r => r.IsSuccess)
+                ?? InitExpressionResult<Func<T, T, T>>.WithErrors(
+                   from r in results
+                   from e in r.Errors
+                   select e);
+        }
+
         private static PropertyInfo Pick(
             HashSet<PropertyInfo> properties,
             Func<PropertyInfo, bool> predicate)
@@ -147,6 +166,7 @@ namespace Flip
                     .Append("Consider make it settable or ")
                     .Append("able to be set through a constructor like ")
                     .Append($"'public {typeof(T).GetConstructorName()}(");
+
                 foreach (ParameterInfo parameter in constructor.GetParameters())
                 {
                     string parameterTypeName =
@@ -155,10 +175,9 @@ namespace Flip
                         .Append($"{parameterTypeName} ")
                         .Append($"{parameter.Name}, ");
                 }
-                string propertyTypeName =
-                    property.PropertyType.GetFriendlyName();
+
                 message
-                    .Append($"{propertyTypeName} ")
+                    .Append($"{property.PropertyType.GetFriendlyName()} ")
                     .Append(property.Name.Substring(0, 1).ToLower())
                     .Append(property.Name.Substring(1))
                     .Append(")'.")
@@ -167,22 +186,7 @@ namespace Flip
 
             return new InitExpressionError(constructor, message.ToString());
         }
-
-        public InitExpressionResult<Func<T, T, T>> CreateCoalesce()
-        {
-            IEnumerable<ConstructorInfo> constructors =
-                typeof(T).GetTypeInfo().DeclaredConstructors;
-
-            var results = new List<InitExpressionResult<Func<T, T, T>>>(
-                from constructor in constructors
-                orderby constructor.GetParameters().Length descending
-                select CreateCoalesceWith(constructor));
-
-            return results.FirstOrDefault(r => r.IsSuccess)
-                ?? InitExpressionResult<Func<T, T, T>>.WithErrors(
-                   from r in results
-                   from e in r.Errors
-                   select e);
-        }
     }
 }
+
+#pragma warning restore SA1204 // Static elements must appear before instance elements

@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Flip
+﻿namespace Flip
 {
+    using System;
+
     public abstract class Model<TId> : IModel<TId>
          where TId : IEquatable<TId>
     {

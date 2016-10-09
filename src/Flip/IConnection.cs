@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Flip
+﻿namespace Flip
 {
+    using System;
+
     public interface IConnection<TModel> :
         IObservable<TModel>,
         IDisposable

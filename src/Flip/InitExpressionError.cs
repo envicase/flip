@@ -1,9 +1,9 @@
-﻿using System;
-using System.Reflection;
-using static System.Environment;
-
-namespace Flip
+﻿namespace Flip
 {
+    using System;
+    using System.Reflection;
+    using static System.Environment;
+
     internal class InitExpressionError
     {
         public InitExpressionError(ConstructorInfo constructor, string message)

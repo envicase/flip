@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Flip
+﻿namespace Flip
 {
+    using System;
+
     public class ConcurrentStreamFactory<TId, TModel> :
         StreamFactoryBase<TId, TModel>
         where TId : IEquatable<TId>
