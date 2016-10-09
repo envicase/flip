@@ -104,6 +104,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="CoalescingFilter_features.cs" />
+    <Compile Include="CompositeStreamFilter_features.cs" />
     <Compile Include="ConcurrentStreamFactory_features.cs" />
     <Compile Include="ConnectionExtensions_features.cs" />
     <Compile Include="Connection_features.cs" />

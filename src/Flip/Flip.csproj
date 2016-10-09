@@ -39,6 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CoalescingFilter.cs" />
+    <Compile Include="CompositeStreamFilter.cs" />
     <Compile Include="ConcurrentStreamFactory.cs" />
     <Compile Include="ConnectionExtensions.cs" />
     <Compile Include="ICoalescable.cs" />

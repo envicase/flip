@@ -74,11 +74,13 @@
             // Arrange
             var factory = new StreamFactory<int, Model>();
             var modelId = _fixture.Create<int>();
-            var reference = new WeakReference(factory.Connect(modelId));
+            IConnection<Model> connection = factory.Connect(modelId);
+            var reference = new WeakReference(connection);
             var observer = Mock.Of<IObserver<Model>>();
-            ((IConnection<Model>)reference.Target).Subscribe(observer);
+            connection.Subscribe(observer);
 
             // Act
+            connection = null;
             GC.Collect();
             GC.WaitForPendingFinalizers();
             factory.Connect(modelId).Emit(new Model(modelId));
