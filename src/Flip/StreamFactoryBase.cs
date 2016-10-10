@@ -33,7 +33,7 @@
 
         public IStreamFilter<TModel> Filter => _filter;
 
-        public IConnection<TModel> Connect(TId modelId)
+        public IConnection<TId, TModel> Connect(TId modelId)
         {
             if (null == modelId)
                 throw new ArgumentNullException(nameof(modelId));
@@ -149,7 +149,7 @@
             }
         }
 
-        private sealed class Connection : IConnection<TModel>, IDisposable
+        private sealed class Connection : IConnection<TId, TModel>
         {
             private readonly Stream _stream;
             private readonly Subject<TModel> _observer;
@@ -169,6 +169,8 @@
             {
                 _subscription.Dispose();
             }
+
+            public TId ModelId => _stream.ModelId;
 
             public void Emit(IObservable<TModel> source)
             {

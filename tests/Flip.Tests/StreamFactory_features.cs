@@ -44,9 +44,10 @@
             var sut = new StreamFactory<int, Model>();
             var modelId = _fixture.Create<int>();
 
-            IConnection<Model> actual = sut.Connect(modelId);
+            IConnection<int, Model> actual = sut.Connect(modelId);
 
             actual.Should().NotBeNull();
+            actual.ModelId.Should().Be(modelId);
         }
 
         [Fact]

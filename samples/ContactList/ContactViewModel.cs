@@ -9,7 +9,7 @@ namespace ContactList
                new StreamFactory<int, Contact>();
 
         public ContactViewModel(Contact model)
-            : base(StreamFactory.Connect, model.Id)
+            : base(() => StreamFactory.Connect(model.Id))
         {
             Connection.Emit(model);
         }

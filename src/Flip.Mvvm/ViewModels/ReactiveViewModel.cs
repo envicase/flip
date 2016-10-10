@@ -10,28 +10,22 @@ namespace Flip.ViewModels
         where TId : IEquatable<TId>
         where TModel : class, IModel<TId>
     {
-        private readonly TId _modelId;
-        private readonly IConnection<TModel> _connection;
+        private readonly IConnection<TId, TModel> _connection;
         private TModel _model;
 
         public ReactiveViewModel(
-            Func<TId, IConnection<TModel>> connectionFactory,
-            TId modelId)
+            Func<IConnection<TId, TModel>> connectionFactory)
         {
             if (connectionFactory == null)
                 throw new ArgumentNullException(nameof(connectionFactory));
 
-            if (modelId == null)
-                throw new ArgumentNullException(nameof(modelId));
-
-            IConnection<TModel> connection = connectionFactory.Invoke(modelId);
+            IConnection<TId, TModel> connection = connectionFactory.Invoke();
             if (null == connection)
             {
                 throw new InvalidOperationException(
                       $"{nameof(connectionFactory)} returned null reference.");
             }
 
-            _modelId = modelId;
             _connection = connection;
             _connection.Subscribe(m => Model = m);
         }
@@ -41,7 +35,7 @@ namespace Flip.ViewModels
             Dispose(disposing: false);
         }
 
-        public TId ModelId => _modelId;
+        public TId ModelId => _connection.ModelId;
 
         public TModel Model
         {
@@ -75,11 +69,11 @@ namespace Flip.ViewModels
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void ThrowIfModelHasInvalidId(TModel model)
         {
-            if (false == _modelId.Equals(model.Id))
+            if (false == ModelId.Equals(model.Id))
             {
                 throw new InvalidOperationException(
                       "Model id is invalid."
-                      + $"{Environment.NewLine} The expected value: {_modelId}"
+                      + $"{Environment.NewLine} The expected value: {ModelId}"
                       + $"{Environment.NewLine} The actual value: {model.Id}");
             }
         }
