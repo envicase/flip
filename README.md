@@ -1,3 +1,5 @@
+# *곧 새로운 저장소로 이관될 예정입니다.*
+
 [![Stories in Ready](https://badge.waffle.io/envicase/flip.png?label=ready&title=Ready)](https://waffle.io/envicase/flip)
 # Flip
 
